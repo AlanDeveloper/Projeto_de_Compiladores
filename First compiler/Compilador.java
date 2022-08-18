@@ -14,7 +14,9 @@ class Compilador{
 			
 			CodeGen backend = new CodeGen();
 			String codigo = backend.geraCodigo(arv);
+			Integer resultado = backend.geraResultado(arv);
 			System.out.println(codigo);
+			System.out.println("Resultado em inteiro: " + resultado);
 
 		}catch(Exception e)
 		{			

@@ -33,4 +33,33 @@ class CodeGen{
 
 	return "";
 	}
+
+	Integer geraResultado(ArvoreSintatica arv)
+	{	
+		return geraResultado2(arv);
+	}
+	Integer geraResultado2(ArvoreSintatica arv)
+	{
+
+	if (arv instanceof Mult)
+		return (geraResultado2(((Mult) arv).arg1) *
+			geraResultado2(((Mult) arv).arg2));
+
+	if (arv instanceof Soma)
+		return (geraResultado2(((Soma) arv).arg1) +
+			geraResultado2(((Soma) arv).arg2));
+	
+	if (arv instanceof Sub)
+		return (geraResultado2(((Sub) arv).arg1) -
+			geraResultado2(((Sub) arv).arg2));
+
+	if (arv instanceof Div)
+		return (geraResultado2(((Div) arv).arg1) /
+			geraResultado2(((Div) arv).arg2));
+
+	if (arv instanceof Num)
+		return ((Num) arv).num;
+
+	return 0;
+	}
 }
