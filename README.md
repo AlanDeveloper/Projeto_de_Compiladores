@@ -2,6 +2,6 @@
 
 Para rodar o compilador
 ```
-> javac*.java
+> javac *.java
 > java Compilador teste
 ```
