@@ -1,0 +1,12 @@
+void main {
+
+    newVar int x; newVar int y;
+
+    x = 10;
+    y = (10 + 20);
+
+    if (( x < y ))
+        then {
+        System.output(x);  
+    };
+}
