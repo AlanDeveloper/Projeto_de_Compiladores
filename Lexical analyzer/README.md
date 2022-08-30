@@ -2,5 +2,9 @@
 ```
 > javacc Karloff.jj
 > javac *.java
-> java Karloff example.jj
+> java Karloff example.kar
+```
+
+```
+> javacc Karloff.jj && javac *.java && java Karloff example.kar
 ```

@@ -22,16 +22,30 @@ SKIP :
 
 TOKEN :
 {
-  <MAIN: "main">
+  <VOID: "void">
+| <MAIN: "main">
+| <NEWVAR: "newVar">
+| <THEN: "then">
+| <ELSE: "else">
+| <WHILE: "while">
+| <INT: "int">
+| <PONTOVIRGULA: ";">
+| <ATRIBUICAO: "=">
 | <ACHAVES: "{">
 | <FCHAVES: "}">
+| <APARENTESES: "(">
+| <FPARENTESES: ")">
+| <ASPASDUPLAS: "\"">
+| <OUTPUT: "System.output">
 
 }
 
 TOKEN :
 {
   <NUM : (["0"-"9"])+>
- |< ID: ["a"-"z","A"-"Z"] ( ["a"-"z","A"-"Z","0"-"9"])*>
+| <ID: ["a"-"z","A"-"Z"] ( ["a"-"z","A"-"Z","0"-"9"])*>
+| <OP: ["+","-","*","/","%","<",">"]>
+| <INCREMENT: ["+"]["+"]>
 
 }
 
@@ -42,11 +56,25 @@ void Karloff () :
 {
 
 (
-  <MAIN> { System.out.println("Palavra reservada: main");}
+  <VOID> { System.out.println("Palavra reservada: void");}
+| <MAIN> { System.out.println("Palavra reservada: main");}
+| <OUTPUT> { System.out.println("Palavra reservada: System.output");}
+| <NEWVAR> { System.out.println("Palavra reservada: newVar");}
+| <THEN> { System.out.println("Palavra reservada: then");}
+| <ELSE> { System.out.println("Palavra reservada: else");}
+| <WHILE> { System.out.println("Palavra reservada: while");}
+| <PONTOVIRGULA> { System.out.println("Ponto e virgula: ;");}
+| <INT> { System.out.println("Palavra reservada: int");}
+| <ATRIBUICAO> { System.out.println("Atribuição: =");}
 | <ACHAVES> { System.out.println("Abre chaves: {");}
 | <FCHAVES> { System.out.println("Fecha chaves: }");}
+| <APARENTESES> { System.out.println("Abre parenteses: (");}
+| <FPARENTESES> { System.out.println("Fecha parenteses: )");}
+| <ASPASDUPLAS> { System.out.println("Aspas duplas: \"");}
 | t=<NUM> { System.out.println("Número: "+ t.image);}
 | t=<ID> { System.out.println("Identificador: "+ t.image);}
+| t=<OP> { System.out.println("Operador: "+ t.image);}
+| t=<INCREMENT> { System.out.println("Incremento: " + t.image);}
 )*
 <EOF> 
 

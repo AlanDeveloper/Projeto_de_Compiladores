@@ -1,0 +1,13 @@
+void main {
+
+    newVar int x;
+
+    x = 2 - 5 * 10;
+
+    if (x < 35)
+        then {
+        System.output("Menor que 35");  
+    } else {
+        System.output("Maior que 35");  
+    }
+}

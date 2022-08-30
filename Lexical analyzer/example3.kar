@@ -1,0 +1,19 @@
+void main {
+
+    newVar int x;
+    newVar int y;
+    newVar int z;
+
+    x = "teste do teste";
+    y = 10 % 2;
+    z = 10 * 2 / 5;
+
+    System.output(x);  
+    System.output(y);  
+    System.output(z);
+
+    while (y > 2) {
+        y++;
+        System.output(y);  
+    }
+}
