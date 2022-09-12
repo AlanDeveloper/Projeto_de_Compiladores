@@ -1,0 +1,19 @@
+void main {
+    newVar int teste;
+    newVar int teste_do_teste2;
+    newVar bool teste3;
+
+    teste = (teste + teste);
+
+    teste3 = true;
+    teste3 = false;
+
+    teste_do_teste2 = (4 + 4);
+    teste_do_teste2 = (4.5 + 4.23123);
+    teste_do_teste2 = (4.5E+3540 + 4);
+
+    if (teste3) 
+        then {
+        System.output(true);
+    };
+}
