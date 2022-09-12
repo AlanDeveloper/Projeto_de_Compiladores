@@ -36,13 +36,17 @@ TOKEN :
 | <WHILE: "while">
 | <REPEAT: "repeat">
 | <INT: "int">
+| <BOOL: "bool">
 | <PONTOVIRGULA: ";">
+| <PONTO: ".">
+| <EXPOENTE: "E">
 | <VIRGULA: ",">
 | <ACHAVES: "{">
 | <FCHAVES: "}">
 | <APARENTESES: "(">
 | <FPARENTESES: ")">
 | <ASPASDUPLAS: "\"">
+| <UNDERLINE: "_">
 | <OUTPUT: "System.output">
 
 }
