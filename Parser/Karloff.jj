@@ -81,7 +81,7 @@ void Karloff () :
 {}
 {
 
-Main()
+Main() (Func())? <EOF> 
 
 }
 
@@ -92,7 +92,6 @@ void Main () :
 {
 
 <VOID> <MAIN> <ACHAVES> VarDECL() SeqComandos() <FCHAVES>
-<EOF> 
 
 }
 
@@ -189,13 +188,13 @@ void Fator () :
 void ListaExp () :
 {}
 {
-  (Exp() | ListaExp2())
+  ListaExp2()
 }
 
 void ListaExp2 () :
 {}
 {
-  <VIRGULA> Exp()
+  Exp() (<VIRGULA> ListaExp2())?
 }
 
 // TOKEN_numliteral -> digitos facao_opcional expoente_opcional
@@ -204,4 +203,33 @@ void Token_numliteral () :
 {}
 {
   (<NUM>)+ (<PONTO> (<NUM>)+)? (<EXPOENTE> (<PLUS> | <MINUS>)? (<NUM>)+)?
+}
+
+// FUNC -> FUNC "func" TIPO TOKEN_id "(" LISTAARG? ")" "{" VARDECL SEQCOMANDOS "}"
+// | "func" TIPO TOKEN_id "(" LISTAARG? ")" "{" VARDECL SEQCOMANDOS "}"
+
+void Func () :
+{}
+{
+  Func2()
+}
+
+void Func2 () :
+{}
+{
+  <FUNC> Tipo() Token_id() <APARENTESES> (ListaArg())? <FPARENTESES> <ACHAVES> VarDECL() SeqComandos() <FCHAVES> (Func2())?
+}
+
+// LISTAARG -> TIPO TOKEN_id | LISTAARG "," TIPO TOKEN_id
+
+void ListaArg () :
+{}
+{
+  ListaArg2()
+}
+
+void ListaArg2 () :
+{}
+{
+  (Tipo() Token_id() (<VIRGULA> ListaArg2())?)
 }

@@ -16,4 +16,8 @@ void main {
         then {
         System.output(true);
     };
+
+    while(true) {
+        teste = (i + teste);
+    };
 }

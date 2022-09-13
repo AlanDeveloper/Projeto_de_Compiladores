@@ -1,0 +1,40 @@
+void main {
+    newVar int teste;
+    newVar int i;
+
+    System.output(5);
+
+    if ((teste == 5)) 
+        then {
+        System.output(teste);    
+    };
+
+    repeat {
+        System.output(teste);
+    } until (false);
+
+    return teste;
+
+    System.output(teste);
+
+    primeiraFuncao(teste, teste2);
+}
+
+func int primeiraFuncao (int teste, bool teste2) {
+    newVar bool boolan;
+    newVar int inteiro;
+
+    System.output(boolan);
+
+    inteiro = 0;
+    inteiro = (inteiro + inteiro);
+}
+
+func int segundaFuncao (int test) {
+    newVar bool boolan;
+
+    inteiro = 0;
+    return teste;
+
+    System.output(teste);
+}
