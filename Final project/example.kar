@@ -1,0 +1,5 @@
+void main {
+    newVar int teste;
+    newVar int teste_do_teste2;
+    newVar bool teste3;
+}

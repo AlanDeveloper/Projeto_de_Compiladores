@@ -1,0 +1,284 @@
+PARSER_BEGIN(Karloff)
+import java.io.*;
+
+class ArvoreKarloff {
+    ArrayList<Comando> comandos;
+
+    ArvoreKarloff(ArrayList comandos) {
+        this.comandos=comandos;
+    }
+}
+
+class Comando {}
+
+class Atrib extends Comando {
+    String id;
+    Exp exp;
+
+    Atrib(String id, Exp exp) {
+        this.id = id;
+        this.exp = exp;
+    }
+}
+
+class Exp {}
+
+class Num extends Exp {
+    int num;
+
+    Num(int num) {
+        this.num = num;
+    }
+}
+
+class Var extends Exp {
+    String var;
+
+    Var(String var) {
+        this.var = var;
+    }
+}
+
+public class Karloff {
+    public static void main(String args[]) throws Exception {
+        // Abrir o arquivo passado por linha de comando contento o código em Karloff:
+        FileInputStream fs = new FileInputStream(new File(args[0]));
+
+        // Instanciar o parser da linguagem Karloff passando como argumento o arquivo contendo o código
+        // Karloff a ser processado:
+        Karloff parser = new Karloff(fs);
+
+        // Chamar a primeira regra do parser que irá analisar o código e devolver a árvore sintática
+        ArvoreKarloff arvore = parser.Karloff();
+        //print(arvore);
+
+        // Passar a árvore para o gerador de código que deve gerar um arquivo .java (ou outra linguagem) com o mesmo nome do arquivo de entrada
+        //geraCodigo(arvore, args[0])
+    }
+
+    //public static void geraCodigo(ArvoreKarloff prog, String arquivo){??????}
+}
+
+PARSER_END(Karloff)
+
+SKIP :
+{
+  " "
+| "\t"
+| "\n"
+| "\r"
+}
+
+TOKEN :
+{
+  <VOID: "void">
+| <MAIN: "main">
+| <RETURN: "return">
+| <FUNC: "func">
+| <TRUE: "true">
+| <FALSE: "false">
+| <UNTIL: "until">
+| <NEWVAR: "newVar">
+| <THEN: "then">
+| <IF: "if">
+| <ELSE: "else">
+| <WHILE: "while">
+| <REPEAT: "repeat">
+| <INT: "int">
+| <BOOL: "bool">
+| <PONTOVIRGULA: ";">
+| <EXPOENTE: "E">
+| <PONTO: ".">
+| <VIRGULA: ",">
+| <ACHAVES: "{">
+| <FCHAVES: "}">
+| <APARENTESES: "(">
+| <FPARENTESES: ")">
+| <ASPASDUPLAS: "\"">
+| <UNDERLINE: "_">
+| <OUTPUT: "System.output">
+
+}
+
+/*
+ * Operators
+ */
+<DEFAULT> TOKEN :
+{
+  <ASSIGN: "=">
+| <LT: "<">
+| <RT: ">">
+| <EQ: "==">
+| <PLUS: "+">
+| <MINUS: "-">
+| <STAR: "*">
+| <SLASH: "/">
+| <BIT_AND: "&">
+| <BIT_OR: "|">
+}
+
+TOKEN :
+{
+  <NUM : (["0"-"9"])+>
+| <ID: ["a"-"z","A"-"Z"] ( ["a"-"z","A"-"Z","0"-"9"])*>
+
+}
+
+// KARLOFF -> MAIN FUNC?
+
+ArvoreKarloff Karloff () :
+{ArrayList comandos = new ArrayList();}
+{
+
+Main() (Func())? <EOF> {return new ArvoreKarloff(comandos);}
+
+}
+
+// MAIN -> "void" "main" "{" VARDECL SEQCOMANDOS "}"
+
+void Main () :
+{}
+{
+
+<VOID> <MAIN> <ACHAVES> VarDECL() SeqComandos() <FCHAVES>
+
+}
+
+// VARDECL -> VARDECL "newVar" TIPO TOKEN_id ";" | vazio
+
+void VarDECL () :
+{}
+{
+  VarDECL2()
+}
+
+void VarDECL2 () :
+{}
+{
+  (<NEWVAR> Tipo() Token_id() <PONTOVIRGULA>)*
+}
+
+// TIPO -> "int" | "bool"
+
+void Tipo () :
+{}
+{
+  (<INT> | <BOOL>)
+}
+
+// TOKEN_id -> letra letraoudigito* finalsublinhado*
+
+void Token_id () :
+{}
+{
+  ((<ID>)+ (<UNDERLINE> (<ID>)+)*)
+}
+
+// SEQCOMANDOS -> SEQCOMANDOS COMANDO | vazio
+
+void SeqComandos () :
+{}
+{
+  SeqComandos2()
+}
+
+void SeqComandos2 () :
+{}
+{
+  (Comando())*
+}
+
+// COMANDO -> TOKEN_id "=" EXP ";"
+// | TOKEN_id "(" LISTAEXP? ")" ";"
+// | "if" "(" EXP ")" "then" "{" SEQCOMANDOS "}" ";"
+// | "while" "(" EXP ")" "{" SEQCOMANDOS "}" ";"
+// | "repeat" "{" SEQCOMANDOS "}" "until" "(" EXP ")" ";"
+// | "return" EXP ";"
+// | "System.output" "(" EXP ")" ";"
+
+void Comando () :
+{}
+{
+  Token_id() (<ASSIGN> Exp() <PONTOVIRGULA> | <APARENTESES> (ListaExp())? <FPARENTESES> <PONTOVIRGULA>)
+  | <IF> <APARENTESES> Exp() <FPARENTESES> <THEN> <ACHAVES> SeqComandos() <FCHAVES> <PONTOVIRGULA>
+  | <WHILE> <APARENTESES> Exp() <FPARENTESES> <ACHAVES> SeqComandos() <FCHAVES> <PONTOVIRGULA>
+  | <REPEAT> <ACHAVES> SeqComandos() <FCHAVES> <UNTIL> <APARENTESES> Exp() <FPARENTESES> <PONTOVIRGULA>
+  | <RETURN> Exp() <PONTOVIRGULA>
+  | <OUTPUT> <APARENTESES> Exp() <FPARENTESES> <PONTOVIRGULA>
+}
+
+// OP -> "+" | "-" | "*" | "/" | "&" | "|" | "<" | ">" | "=="
+
+void Op () :
+{}
+{
+  (<LT> | <RT> | <EQ> | <PLUS> | <MINUS> | <STAR> | <SLASH> | <BIT_AND> | <BIT_OR>)
+}
+
+// EXP -> "(" EXP OP EXP ")" | FATOR
+
+void Exp () :
+{}
+{
+  ((<APARENTESES> Exp() Op() Exp() <FPARENTESES>) | Fator())
+}
+
+// FATOR -> TOKEN_id | TOKEN_id "(" LISTAEXP? ")"
+// | TOKEN_numliteral | "true" | "false"
+
+void Fator () :
+{}
+{
+  ((Token_id() (<APARENTESES> (ListaExp())? <FPARENTESES>)?) | Token_numliteral() | <TRUE> | <FALSE>)
+}
+
+// LISTAEXP -> EXP | LISTAEXP "," EXP
+
+void ListaExp () :
+{}
+{
+  ListaExp2()
+}
+
+void ListaExp2 () :
+{}
+{
+  Exp() (<VIRGULA> ListaExp2())?
+}
+
+// TOKEN_numliteral -> digitos facao_opcional expoente_opcional
+
+void Token_numliteral () :
+{}
+{
+  (<NUM>)+ (<PONTO> (<NUM>)+)? (<EXPOENTE> (<PLUS> | <MINUS>)? (<NUM>)+)?
+}
+
+// FUNC -> FUNC "func" TIPO TOKEN_id "(" LISTAARG? ")" "{" VARDECL SEQCOMANDOS "}"
+// | "func" TIPO TOKEN_id "(" LISTAARG? ")" "{" VARDECL SEQCOMANDOS "}"
+
+void Func () :
+{}
+{
+  Func2()
+}
+
+void Func2 () :
+{}
+{
+  <FUNC> Tipo() Token_id() <APARENTESES> (ListaArg())? <FPARENTESES> <ACHAVES> VarDECL() SeqComandos() <FCHAVES> (Func2())?
+}
+
+// LISTAARG -> TIPO TOKEN_id | LISTAARG "," TIPO TOKEN_id
+
+void ListaArg () :
+{}
+{
+  ListaArg2()
+}
+
+void ListaArg2 () :
+{}
+{
+  (Tipo() Token_id() (<VIRGULA> ListaArg2())?)
+}
